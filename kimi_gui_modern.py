@@ -12,6 +12,9 @@ import threading
 import queue
 import json
 import os
+import tempfile
+import requests
+import playsound
 from datetime import datetime
 from kimi_client import KimiClient
 from dotenv import load_dotenv
@@ -46,6 +49,7 @@ class ModernKimiGUI:
         self.is_recording = False
         self.is_speaking = False
         self.tts_queue = queue.Queue()
+        self.uploaded_files = []
         
     def setup_window(self):
         """Fenster-Konfiguration"""
@@ -160,6 +164,16 @@ class ModernKimiGUI:
                              highlightthickness=0, length=100,
                              font=('Segoe UI', 9))
         temp_scale.pack(side=tk.LEFT, padx=5)
+
+        # Eleven Labs Voice ID
+        tk.Label(controls_frame, text="Voice ID:",
+                font=('Segoe UI', 12),
+                bg=self.colors['bg_primary'],
+                fg=self.colors['text_secondary']).pack(side=tk.LEFT, padx=(10, 5))
+        self.voice_var = tk.StringVar(value=os.getenv("ELEVEN_VOICE_ID", ""))
+        voice_entry = ttk.Entry(controls_frame, textvariable=self.voice_var, width=20,
+                                font=('Segoe UI', 10))
+        voice_entry.pack(side=tk.LEFT, padx=5)
         
     def create_chat_area(self, parent):
         """Chat-Anzeige-Bereich"""
@@ -255,7 +269,19 @@ class ModernKimiGUI:
                                padx=15,
                                pady=8)
         self.stt_btn.pack(side=tk.LEFT, padx=5)
-        
+
+        # Upload-Button
+        upload_btn = tk.Button(button_frame,
+                              text="📁 Datei hochladen",
+                              command=self.upload_file,
+                              bg=self.colors['bg_secondary'],
+                              fg=self.colors['text_secondary'],
+                              font=('Segoe UI', 12),
+                              relief=tk.FLAT,
+                              padx=15,
+                              pady=8)
+        upload_btn.pack(side=tk.LEFT, padx=5)
+
         # Clear-Button
         clear_btn = tk.Button(button_frame,
                             text="🗑️ Leeren",
@@ -392,6 +418,10 @@ class ModernKimiGUI:
         
         # Chat-Verlauf aktualisieren
         self.current_conversation.append({"role": "user", "content": user_input})
+        files_to_send = self.uploaded_files
+        self.uploaded_files = []
+        for f in files_to_send:
+            self.current_conversation.append({"role": "user", "content": f"[FILE {f['name']}]:\n{f['content']}"})
         
         # In Thread senden (UI nicht blockieren)
         threading.Thread(target=self._send_message_thread, args=(user_input,), daemon=True).start()
@@ -417,7 +447,7 @@ class ModernKimiGUI:
             self.current_conversation.append({"role": "assistant", "content": response_content})
             
             # TTS abspielen (falls aktiviert)
-            if hasattr(self, 'tts_enabled') and self.tts_enabled and self.tts_engine:
+            if hasattr(self, 'tts_enabled') and self.tts_enabled and (self.tts_engine or self.voice_var.get().strip()):
                 self._speak_text(response_content)
                 
             self.root.after(0, self.update_status, "Bereit")
@@ -548,8 +578,8 @@ class ModernKimiGUI:
             
     def _speak_text(self, text):
         """Queue text for TTS output"""
-        if self.tts_engine:
-            self.tts_queue.put(text)
+        # Always queue text, worker decides which engine is used
+        self.tts_queue.put(text)
 
     def _tts_worker(self):
         """Process the TTS queue sequentially to avoid concurrency issues."""
@@ -559,13 +589,61 @@ class ModernKimiGUI:
                 break
             try:
                 self.is_speaking = True
-                self.tts_engine.say(text)
-                self.tts_engine.runAndWait()
+                voice_id = self.voice_var.get().strip()
+                api_key = os.getenv("ELEVEN_API_KEY") or os.getenv("ELEVENLABS_API_KEY")
+
+                if voice_id and api_key:
+                    try:
+                        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+                        headers = {
+                            "xi-api-key": api_key,
+                            "Content-Type": "application/json"
+                        }
+                        payload = {"text": text}
+                        resp = requests.post(url, json=payload)
+                        if resp.status_code == 200:
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
+                                tmp.write(resp.content)
+                            playsound.playsound(tmp.name)
+                            os.unlink(tmp.name)
+                        else:
+                            self.root.after(0, self.add_message, "error", f"❌ Eleven Labs Fehler: {resp.status_code}\n")
+                            if self.tts_engine:
+                                self.tts_engine.say(text)
+                                self.tts_engine.runAndWait()
+                    except Exception as e:
+                        self.root.after(0, self.add_message, "error", f"❌ Eleven Labs Fehler: {e}\n")
+                        if self.tts_engine:
+                            self.tts_engine.say(text)
+                            self.tts_engine.runAndWait()
+                elif self.tts_engine:
+                    self.tts_engine.say(text)
+                    self.tts_engine.runAndWait()
             except Exception as e:
                 print(f"TTS Fehler: {e}")
             finally:
                 self.is_speaking = False
                 self.tts_queue.task_done()
+
+    def upload_file(self):
+        """Allow user to select a file and store its content"""
+        filepath = filedialog.askopenfilename(title="Datei auswählen")
+        if not filepath:
+            return
+        try:
+            with open(filepath, 'rb') as f:
+                data = f.read()
+            try:
+                text = data.decode('utf-8')
+            except Exception:
+                text = ''
+            self.uploaded_files.append({
+                "name": os.path.basename(filepath),
+                "content": text,
+            })
+            self.add_message("system", f"📁 Datei hochgeladen: {os.path.basename(filepath)} ({len(data)} Bytes)\n")
+        except Exception as e:
+            messagebox.showerror("Upload-Fehler", f"Datei konnte nicht hochgeladen werden: {e}")
                 
     def clear_chat(self):
         """Chat leeren"""

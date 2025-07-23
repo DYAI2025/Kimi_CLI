@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def test_api_endpoint(base_url, description):
+def run_api_endpoint(base_url, description):
     """Teste einen spezifischen API-Endpoint"""
     print(f"\n🔍 Teste {description}: {base_url}")
     
@@ -54,7 +54,7 @@ def main():
     ]
     
     for base_url, description in endpoints:
-        success = test_api_endpoint(base_url, description)
+        success = run_api_endpoint(base_url, description)
         if success:
             print(f"\n🎉 Erfolgreich! Verwende: {base_url}")
             break
