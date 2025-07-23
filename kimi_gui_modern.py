@@ -9,6 +9,7 @@ Farbenfrohe, minimalistische Benutzeroberfläche mit Spracheingabe und -ausgabe
 import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox, filedialog
 import threading
+import queue
 import json
 import os
 from datetime import datetime
@@ -44,6 +45,7 @@ class ModernKimiGUI:
         # Status
         self.is_recording = False
         self.is_speaking = False
+        self.tts_queue = queue.Queue()
         
     def setup_window(self):
         """Fenster-Konfiguration"""
@@ -335,6 +337,8 @@ class ModernKimiGUI:
                 self.tts_engine.setProperty('rate', int(os.getenv('VOICE_RATE', '180')))
                 self.tts_engine.setProperty('volume', float(os.getenv('VOICE_VOLUME', '0.8')))
                 self.update_status("TTS initialisiert")
+                self.tts_thread = threading.Thread(target=self._tts_worker, daemon=True)
+                self.tts_thread.start()
             except Exception as e:
                 print(f"TTS Fehler: {e}")
                 self.tts_engine = None
@@ -414,7 +418,7 @@ class ModernKimiGUI:
             
             # TTS abspielen (falls aktiviert)
             if hasattr(self, 'tts_enabled') and self.tts_enabled and self.tts_engine:
-                threading.Thread(target=self._speak_text, args=(response_content,), daemon=True).start()
+                self._speak_text(response_content)
                 
             self.root.after(0, self.update_status, "Bereit")
             
@@ -543,8 +547,16 @@ class ModernKimiGUI:
             self.update_status("TTS deaktiviert")
             
     def _speak_text(self, text):
-        """Text per TTS ausgeben"""
-        if self.tts_engine and not self.is_speaking:
+        """Queue text for TTS output"""
+        if self.tts_engine:
+            self.tts_queue.put(text)
+
+    def _tts_worker(self):
+        """Process the TTS queue sequentially to avoid concurrency issues."""
+        while True:
+            text = self.tts_queue.get()
+            if text is None:
+                break
             try:
                 self.is_speaking = True
                 self.tts_engine.say(text)
@@ -553,6 +565,7 @@ class ModernKimiGUI:
                 print(f"TTS Fehler: {e}")
             finally:
                 self.is_speaking = False
+                self.tts_queue.task_done()
                 
     def clear_chat(self):
         """Chat leeren"""

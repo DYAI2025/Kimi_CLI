@@ -234,6 +234,61 @@ class KimiMoonshotClient:
             
         except Exception as e:
             return {"error": f"Tool Call Fehler: {str(e)}"}
+
+    def execute_with_code_runner(self, prompt: str) -> str:
+        """Use the CodeRunner tool with the preview model to execute code."""
+        tools = [{
+            "type": "function",
+            "function": {
+                "name": "code_runner",
+                "description": "Execute Python or JavaScript code and return the result",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "language": {
+                            "type": "string",
+                            "enum": ["python", "javascript"]
+                        },
+                        "code": {
+                            "type": "string",
+                            "description": "Source code to execute"
+                        }
+                    },
+                    "required": ["language", "code"]
+                },
+            }
+        }]
+
+        # Erste Anfrage an die API
+        result = self.tool_call(prompt, tools, system_prompt=None)
+
+        if "tool_calls" not in result:
+            return result.get("message", "")
+
+        from coderunner_tool import run_code
+
+        # Nur den ersten Tool Call verarbeiten
+        call = result["tool_calls"][0]
+        args = json.loads(call.function.arguments)
+        exec_result = run_code(args["language"], args["code"])
+
+        follow_up = [
+            {"role": "assistant", "tool_calls": [call]},
+            {
+                "role": "tool",
+                "tool_call_id": call.id,
+                "content": json.dumps(exec_result),
+            },
+        ]
+
+        response = self.client.chat.completions.create(
+            model="kimi-k2-0711-preview",
+            messages=follow_up,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+        )
+
+        return response.choices[0].message.content
     
     def clear_conversation(self):
         """Conversation-Verlauf löschen"""
