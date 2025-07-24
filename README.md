@@ -296,6 +296,10 @@ Kimi K2 Instruct führt in vielen Benchmarks:
 | **AIME 2024** | **69.6%** | 59.4% | 46.5% |
 | **ZebraLogic** | **89.0%** | 84.0% | 58.5% |
 
+
+## 🛠️ Kimi K2 Agent
+
+Neue Agent-Klasse `KimiK2Agent` mit direktem Zugriff auf das Execution Toolkit. Befehle aus einer Plan-Datei werden sequenziell ausgeführt.
 ## 📄 Lizenz
 
 Modified MIT License - Siehe [Hugging Face Modell-Seite](https://huggingface.co/moonshotai/Kimi-K2-Instruct)
