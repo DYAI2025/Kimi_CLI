@@ -20,7 +20,7 @@ class KimiChatCLI(cmd.Cmd):
 State-of-the-Art MoE Modell mit 1T Parametern (32B aktiviert)
 ✨ Spezialisiert auf Coding, Reasoning und Tool Use
 🌐 128K Token Kontext
-⚡ Angetrieben von Together AI
+⚡ Powered by Moonshot AI
 
 Geben Sie 'help' ein für Kommandos oder chatten Sie direkt los!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -55,9 +55,9 @@ Geben Sie 'help' ein für Kommandos oder chatten Sie direkt los!
         except Exception as e:
             print(f"❌ Fehler beim Initialisieren: {e}")
             print("\n💡 Setup-Hilfe:")
-            print("1. Gehen Sie zu: https://api.together.xyz/settings/api-keys")
+            print("1. Besuchen Sie: https://platform.moonshot.ai")
             print("2. Erstellen Sie einen API-Key")
-            print("3. Setzen Sie TOGETHER_API_KEY in der .env-Datei")
+            print("3. Setzen Sie MOONSHOT_API_KEY in der .env-Datei")
             sys.exit(1)
     
     def default(self, line):

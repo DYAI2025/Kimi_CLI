@@ -3,12 +3,12 @@
 
 """
 Kimi K2 Instruct Client
-Moderne Python-Client für Kimi K2 Instruct über Together AI
+Python-Client für Kimi K2 Instruct über die Moonshot AI API
 """
 
 import os
 from typing import Iterator, List, Dict, Any, Optional
-from together import Together
+from openai import OpenAI
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
@@ -36,14 +36,14 @@ class KimiClient:
         Initialisiere Kimi K2 Client
         
         Args:
-            api_key: Together AI API Key (optional, wird aus .env geladen)
+            api_key: Moonshot AI API Key (optional, wird aus .env geladen)
         """
-        self.api_key = api_key or os.getenv("TOGETHER_API_KEY")
-        if not self.api_key or self.api_key in ["demo_key_please_replace", "your_api_key_here"]:
-            raise ValueError("TOGETHER_API_KEY ist erforderlich. Bitte in .env-Datei konfigurieren.")
+        self.api_key = api_key or os.getenv("MOONSHOT_API_KEY")
+        if not self.api_key or self.api_key == "sk-demo_key_please_replace":
+            raise ValueError("MOONSHOT_API_KEY ist erforderlich. Bitte in .env-Datei konfigurieren.")
         
-        # Together AI Client
-        self.client = Together(api_key=self.api_key)
+        # Moonshot AI Client (OpenAI kompatibel)
+        self.client = OpenAI(api_key=self.api_key, base_url="https://api.moonshot.ai/v1")
         
         # Standard-Konfiguration
         self.model = os.getenv("KIMI_MODEL", "moonshotai/Kimi-K2-Instruct")  # Korrigiert mit moonshotai/ Prefix
@@ -52,6 +52,10 @@ class KimiClient:
         
         # Conversation State
         self.conversation_history: List[Dict[str, str]] = []
+
+    def simple_chat(self, message: str) -> str:
+        """Shortcut for chat without system prompt."""
+        return self.chat(message)
         
     def chat(self, message: str, system_prompt: Optional[str] = None) -> str:
         """
@@ -222,13 +226,13 @@ class KimiClient:
             "model": self.model,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
-            "api_provider": "Together AI",
+            "api_provider": "Moonshot AI",
             "conversation_length": len(self.conversation_history)
         }
 
 # Utility-Funktionen
 def test_connection() -> bool:
-    """Teste die Verbindung zu Together AI"""
+    """Teste die Verbindung zu Moonshot AI"""
     try:
         client = KimiClient()
         response = client.chat("Hallo, kannst du mich hören?")
@@ -263,9 +267,9 @@ def main():
     except Exception as e:
         print(f"❌ Fehler: {e}")
         print("\n🔧 Lösungsvorschläge:")
-        print("1. Überprüfen Sie Ihren TOGETHER_API_KEY in der .env-Datei")
-        print("2. Registrieren Sie sich bei: https://api.together.xyz/settings/api-keys")
-        print("3. Installieren Sie Dependencies: pip install together python-dotenv")
+        print("1. Überprüfen Sie Ihren MOONSHOT_API_KEY in der .env-Datei")
+        print("2. Registrieren Sie sich bei: https://platform.moonshot.ai")
+        print("3. Installieren Sie Dependencies: pip install python-dotenv pydantic openai")
 
 if __name__ == "__main__":
     main()

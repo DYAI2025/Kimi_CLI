@@ -23,10 +23,10 @@ echo
 
 # Dependencies prüfen
 echo -e "${BLUE}🔧 Prüfe Dependencies...${NC}"
-python3 -c "import together, dotenv, pydantic" 2>/dev/null
+python3 -c "import dotenv, pydantic" 2>/dev/null
 if [ $? -ne 0 ]; then
     echo -e "${YELLOW}⚠️  Installiere fehlende Dependencies...${NC}"
-    pip3 install together python-dotenv pydantic --quiet
+    pip3 install python-dotenv pydantic --quiet
     echo -e "${GREEN}✅ Dependencies installiert${NC}"
 fi
 
@@ -43,14 +43,14 @@ python3 -c "
 import os
 from dotenv import load_dotenv
 load_dotenv()
-api_key = os.getenv('TOGETHER_API_KEY', '')
-if not api_key or api_key in ['demo_key_please_replace', 'your_api_key_here']:
+api_key = os.getenv('MOONSHOT_API_KEY', '')
+if not api_key or api_key == 'sk-demo_key_please_replace':
     print('❌ Demo-API-Key erkannt - Setup erforderlich!')
     print('📋 Anleitung:')
-    print('   1. Gehen Sie zu: https://api.together.xyz/settings/api-keys')
+    print('   1. Besuchen Sie https://platform.moonshot.ai')
     print('   2. Registrieren Sie sich kostenlos')
     print('   3. Erstellen Sie einen API-Key')
-    print('   4. Bearbeiten Sie .env: TOGETHER_API_KEY=your_actual_key')
+    print('   4. Bearbeiten Sie .env: MOONSHOT_API_KEY=sk-your_actual_key')
     print()
 else:
     print('✅ API-Key konfiguriert')
@@ -108,4 +108,4 @@ echo -e "${CYAN}• 1 Trillion Parameter (32B aktiviert)${NC}"
 echo -e "${CYAN}• 128K Token Kontext${NC}"
 echo -e "${CYAN}• Spezialisiert auf Coding & Reasoning${NC}"
 echo -e "${CYAN}• Tool Use & Function Calling${NC}"
-echo -e "${CYAN}• Angetrieben von Together AI${NC}" 
+echo -e "${CYAN}• Powered by Moonshot AI${NC}"
