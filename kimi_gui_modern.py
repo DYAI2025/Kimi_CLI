@@ -342,8 +342,8 @@ class ModernKimiGUI:
         self.status_label.pack(side=tk.LEFT, padx=10, pady=5)
         
         # API-Status
-        api_key = os.getenv("TOGETHER_API_KEY", "")
-        if not api_key or api_key in ["demo_key_please_replace", "your_api_key_here"]:
+        api_key = os.getenv("MOONSHOT_API_KEY", "")
+        if not api_key or api_key == "sk-demo_key_please_replace":
             api_status = "❌ API-Key Setup erforderlich"
             color = self.colors['error']
         else:
@@ -714,11 +714,11 @@ def main():
     print("🚀 Starte Moderne Kimi K2 GUI...")
     
     # API-Key prüfen
-    api_key = os.getenv("TOGETHER_API_KEY", "")
-    if not api_key or api_key in ["demo_key_please_replace", "your_api_key_here"]:
+    api_key = os.getenv("MOONSHOT_API_KEY", "")
+    if not api_key or api_key == "sk-demo_key_please_replace":
         print("⚠️  Demo-API-Key erkannt. Bitte konfigurieren Sie einen echten API-Key in der .env-Datei:")
-        print("   TOGETHER_API_KEY=your_actual_api_key_here")
-        print("   Registrierung: https://api.together.xyz/settings/api-keys")
+        print("   MOONSHOT_API_KEY=sk-your_actual_api_key_here")
+        print("   Registrierung: https://platform.moonshot.ai")
     
     app = ModernKimiGUI()
     app.run()

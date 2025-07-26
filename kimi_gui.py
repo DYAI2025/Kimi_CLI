@@ -137,7 +137,7 @@ class KimiGUI:
             self.add_to_chat("Fehler", f"Kimi Client konnte nicht initialisiert werden: {e}", "error")
             messagebox.showerror("Initialisierungsfehler", 
                                f"Fehler beim Laden des Kimi Clients:\n\n{e}\n\n"
-                               "Stellen Sie sicher, dass TOGETHER_API_KEY in der .env-Datei gesetzt ist.")
+                               "Stellen Sie sicher, dass MOONSHOT_API_KEY in der .env-Datei gesetzt ist.")
     
     def update_temp_label(self, value):
         """Aktualisiert das Temperature Label"""

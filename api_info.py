@@ -16,12 +16,12 @@ def main():
     print("━" * 60)
     
     # API-Key Status prüfen
-    api_key = os.getenv("TOGETHER_API_KEY", "")
+    api_key = os.getenv("MOONSHOT_API_KEY", "")
     
     if not api_key:
-        print("❌ Kein TOGETHER_API_KEY in .env gefunden")
+        print("❌ Kein MOONSHOT_API_KEY in .env gefunden")
         status = "❌ Nicht konfiguriert"
-    elif api_key in ["demo_key_please_replace", "your_together_api_key_here", "your_api_key_here"]:
+    elif api_key == "sk-demo_key_please_replace":
         print("⚠️  Demo-API-Key gefunden - Setup erforderlich")
         status = "⚠️ Setup erforderlich"
     else:
@@ -40,18 +40,18 @@ def main():
     
     print()
     print("🛠️ Setup-Anleitung:")
-    print("1. Gehen Sie zu: https://api.together.xyz/settings/api-keys")
-    print("2. Registrieren Sie sich kostenlos bei Together AI")
+    print("1. Besuchen Sie https://platform.moonshot.ai")
+    print("2. Registrieren Sie sich kostenlos")
     print("3. Erstellen Sie einen neuen API-Key")
     print("4. Bearbeiten Sie die .env-Datei:")
-    print("   TOGETHER_API_KEY=your_actual_api_key_here")
+    print("   MOONSHOT_API_KEY=sk-your_actual_api_key_here")
     print()
     print("🎯 Über Kimi K2 Instruct:")
     print("• State-of-the-Art MoE Modell mit 1 Trillion Parametern")
     print("• 32B Parameter aktiviert pro Forward Pass")
     print("• 128K Token Kontext für umfangreiche Dokumente")
     print("• Spezialisiert auf Coding, Reasoning und Tool Use")
-    print("• Angetrieben von Together AI")
+    print("• Powered by Moonshot AI")
     print()
     print("🚀 Starten:")
     print("• CLI Chat: python3 kimi_chat.py")

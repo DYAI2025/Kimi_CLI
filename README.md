@@ -6,7 +6,7 @@ Vollständiger Client für **Kimi K2 Instruct** - das State-of-the-Art MoE Model
 
 ## ✨ Features
 
-- **🎯 Echtes Kimi K2 Instruct Modell** über Together AI
+- **🎯 Echtes Kimi K2 Instruct Modell** über Moonshot AI
 - **💻 CLI Chat** - Interaktive Kommandozeilen-Oberfläche
 - **🖥️ GUI Chat** - Moderne grafische Benutzeroberfläche
 - **⚡ Streaming Support** - Live-Antworten
@@ -18,14 +18,14 @@ Vollständiger Client für **Kimi K2 Instruct** - das State-of-the-Art MoE Model
 
 ### 1. API-Key einrichten
 
-1. **Erstellen Sie einen API-Key bei Together AI:**
+1. **Erstellen Sie einen API-Key bei Moonshot AI:**
    ```
-   https://api.together.xyz/settings/api-keys
+   https://platform.moonshot.ai
    ```
 
 2. **Setzen Sie den API-Key in der `.env`-Datei:**
    ```bash
-   TOGETHER_API_KEY=your_api_key_here
+   MOONSHOT_API_KEY=sk-your_api_key_here
    ```
 
 ### 2. Starten
@@ -213,7 +213,7 @@ if result["finish_reason"] == "tool_calls":
 | **Architektur** | Mixture-of-Experts (MoE) |
 | **Kontext** | 128K Token |
 | **Spezialisierung** | Coding, Reasoning, Tool Use |
-| **Provider** | Together AI |
+| **Provider** | Moonshot AI |
 | **Training** | 15.5T Token mit Muon Optimizer |
 
 ## 🎯 Anwendungsfälle
@@ -241,15 +241,15 @@ if result["finish_reason"] == "tool_calls":
 ### API-Key Probleme
 
 ```bash
-❌ Fehler: Bitte setzen Sie TOGETHER_API_KEY in der .env-Datei
+❌ Fehler: Bitte setzen Sie MOONSHOT_API_KEY in der .env-Datei
 ```
 
 **Lösung:**
-1. Gehen Sie zu: https://api.together.xyz/settings/api-keys
+1. Besuchen Sie https://platform.moonshot.ai
 2. Erstellen Sie einen neuen API-Key
 3. Setzen Sie ihn in der `.env`-Datei:
    ```
-   TOGETHER_API_KEY=your_actual_api_key_here
+   MOONSHOT_API_KEY=sk-your_actual_api_key_here
    ```
 
 ### Dependencies
@@ -260,7 +260,7 @@ if result["finish_reason"] == "tool_calls":
 
 **Lösung:**
 ```bash
-pip3 install together python-dotenv pydantic
+pip3 install python-dotenv pydantic openai
 ```
 
 ### GUI Probleme
@@ -324,7 +324,7 @@ Modified MIT License - Siehe [Hugging Face Modell-Seite](https://huggingface.co/
 
 ## 🤝 Support
 
-- **Together AI Docs:** https://docs.together.ai/
+- **Moonshot AI Docs:** https://platform.moonshot.ai
 - **Kimi K2 Model Card:** https://huggingface.co/moonshotai/Kimi-K2-Instruct
 - **Issues:** Erstellen Sie ein Issue in diesem Repository
 

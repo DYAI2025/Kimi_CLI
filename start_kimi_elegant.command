@@ -69,7 +69,7 @@ check_dependencies() {
     fi
     
     # Package Checks
-    local packages=("together" "python-dotenv" "pydantic")
+    local packages=("python-dotenv" "pydantic")
     local optional=("pyttsx3" "speechrecognition" "pyaudio")
     
     for pkg in "${packages[@]}"; do
@@ -118,7 +118,7 @@ install_dependencies() {
     
     # Required packages
     echo -e "${BLUE}Installing required packages:${NC}"
-    pip3 install together python-dotenv pydantic
+    pip3 install python-dotenv pydantic
     
     echo ""
     echo -e "${BLUE}Installing optional voice packages:${NC}"

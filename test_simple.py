@@ -14,15 +14,15 @@ load_dotenv()
 def test_api():
     print("🧪 Teste Kimi K2 API-Verbindung...")
     
-    api_key = os.getenv("TOGETHER_API_KEY", "")
+    api_key = os.getenv("MOONSHOT_API_KEY", "")
     
     if not api_key or api_key == "demo_key_please_replace":
         print("❌ Demo-API-Key aktiv - Echter API-Key erforderlich")
         print("\n💡 Setup:")
-        print("1. Besuchen Sie: https://api.together.xyz/settings/api-keys")
+        print("1. Besuchen Sie: https://platform.moonshot.ai")
         print("2. Erstellen Sie einen API-Key")
         print("3. Setzen Sie ihn in der .env-Datei:")
-        print("   TOGETHER_API_KEY=your_actual_api_key_here")
+        print("   MOONSHOT_API_KEY=sk-your_actual_api_key_here")
         return False
     
     try:
