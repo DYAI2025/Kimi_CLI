@@ -1,4 +1,3 @@
-HEAD
 # Kimi_CLI
 =======
 # 🤖 Kimi K2 Instruct Client
@@ -92,6 +91,19 @@ python3 kimi_client.py
 - ⚡ **Live-Streaming** - Antworten erscheinen in Echtzeit
 - 📱 **Responsive** - Skalierbare Oberfläche
 - 🎛️ **Live-Konfiguration** - Modell & Temperature ohne Neustart ändern
+
+### Text-to-Speech mit ElevenLabs
+
+1. Erstellen Sie einen API-Key auf <https://elevenlabs.io> und tragen Sie ihn in der `.env` ein:
+   ```bash
+   ELEVEN_API_KEY=your_elevenlabs_key
+   ```
+2. Optional kann die bevorzugte Stimme direkt per Voice ID gesetzt werden:
+   ```bash
+   ELEVEN_VOICE_ID=your_voice_id
+   ```
+3. In der modernen GUI lässt sich die Voice ID auch zur Laufzeit im Feld **Voice ID** ändern.
+
 
 ### Programmierung (Python)
 
@@ -300,6 +312,12 @@ Kimi K2 Instruct führt in vielen Benchmarks:
 ## 🛠️ Kimi K2 Agent
 
 Neue Agent-Klasse `KimiK2Agent` mit direktem Zugriff auf das Execution Toolkit. Befehle aus einer Plan-Datei werden sequenziell ausgeführt.
+
+## 🌟 Innovationsideen
+
+1. **Multimodaler Upload** - Bilder oder PDFs direkt im Chatfenster analysieren lassen.
+2. **Offline-Modus** - Kleine Sprachmodelle lokal ausführen, falls keine Internetverbindung besteht.
+3. **Workflow-Vorlagen** - Vorgefertigte Befehlssequenzen speichern und als Makros starten.
 ## 📄 Lizenz
 
 Modified MIT License - Siehe [Hugging Face Modell-Seite](https://huggingface.co/moonshotai/Kimi-K2-Instruct)
@@ -312,5 +330,4 @@ Modified MIT License - Siehe [Hugging Face Modell-Seite](https://huggingface.co/
 
 ---
 
-**Kimi K2 Instruct** - Agentic Intelligence für die Zukunft 🚀 
->>>>>>> cce06cf (first)
+**Kimi K2 Instruct** - Agentic Intelligence für die Zukunft 🚀

@@ -15,6 +15,7 @@ import os
 import tempfile
 import requests
 import playsound
+from typing import Optional
 from datetime import datetime
 from kimi_client import KimiClient
 from dotenv import load_dotenv
@@ -31,6 +32,26 @@ except ImportError:
     print("⚠️  TTS/STT nicht verfügbar. Installieren Sie: pip install pyttsx3 speechrecognition pyaudio")
 
 load_dotenv()
+
+
+def play_elevenlabs_tts(text: str, voice_id: str, api_key: str) -> bool:
+    """Play text using the ElevenLabs API. Returns True on success."""
+    try:
+        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+        headers = {"xi-api-key": api_key, "Content-Type": "application/json"}
+        resp = requests.post(url, json={"text": text}, timeout=30)
+        resp.raise_for_status()
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
+            tmp.write(resp.content)
+            tmp.flush()
+        try:
+            playsound.playsound(tmp.name, block=True)
+        finally:
+            os.unlink(tmp.name)
+        return True
+    except Exception as exc:
+        print(f"TTS Error: {exc}")
+        return False
 
 class ModernKimiGUI:
     def __init__(self):
@@ -593,29 +614,10 @@ class ModernKimiGUI:
                 api_key = os.getenv("ELEVEN_API_KEY") or os.getenv("ELEVENLABS_API_KEY")
 
                 if voice_id and api_key:
-                    try:
-                        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-                        headers = {
-                            "xi-api-key": api_key,
-                            "Content-Type": "application/json"
-                        }
-                        payload = {"text": text}
-                        resp = requests.post(url, json=payload)
-                        if resp.status_code == 200:
-                            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
-                                tmp.write(resp.content)
-                            playsound.playsound(tmp.name)
-                            os.unlink(tmp.name)
-                        else:
-                            self.root.after(0, self.add_message, "error", f"❌ Eleven Labs Fehler: {resp.status_code}\n")
-                            if self.tts_engine:
-                                self.tts_engine.say(text)
-                                self.tts_engine.runAndWait()
-                    except Exception as e:
-                        self.root.after(0, self.add_message, "error", f"❌ Eleven Labs Fehler: {e}\n")
-                        if self.tts_engine:
-                            self.tts_engine.say(text)
-                            self.tts_engine.runAndWait()
+                    success = play_elevenlabs_tts(text, voice_id, api_key)
+                    if not success and self.tts_engine:
+                        self.tts_engine.say(text)
+                        self.tts_engine.runAndWait()
                 elif self.tts_engine:
                     self.tts_engine.say(text)
                     self.tts_engine.runAndWait()
