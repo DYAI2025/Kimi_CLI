@@ -1,0 +1,51 @@
+{
+  "Kimi Agent Init": {
+    "prefix": "kimi-init",
+    "body": [
+      "from kimi_agent import KimiK2Agent",
+      "from config import Config",
+      "",
+      "# Initialize configuration",
+      "config = Config()",
+      "",
+      "# Create agent",
+      "agent = KimiK2Agent(",
+      "    api_key=config.API_KEY,",
+      "    model=config.MODEL_NAME,",
+      "    temperature=config.TEMPERATURE",
+      ")",
+      "",
+      "# $0"
+    ],
+    "description": "Initialize Kimi K2 Agent"
+  },
+  "Kimi Chat": {
+    "prefix": "kimi-chat",
+    "body": [
+      "response = agent.chat(\"${1:Your message here}\")",
+      "print(f\"\ud83e\udd16 {response}\")",
+      "$0"
+    ],
+    "description": "Chat with Kimi K2"
+  },
+  "Kimi Analyze Code": {
+    "prefix": "kimi-analyze",
+    "body": [
+      "with open(\"${1:filename.py}\", 'r') as f:",
+      "    code = f.read()",
+      "",
+      "analysis = agent.analyze_code(code, \"${1:filename.py}\")",
+      "print(f\"\ud83d\udcca Analysis: {analysis}\")",
+      "$0"
+    ],
+    "description": "Analyze code with Kimi K2"
+  },
+  "Kimi Execute Plan": {
+    "prefix": "kimi-plan",
+    "body": [
+      "agent.execute_plan(\"${1:plans/example_plan.txt}\")",
+      "$0"
+    ],
+    "description": "Execute a plan file"
+  }
+}

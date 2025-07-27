@@ -1,0 +1,26 @@
+# Example Plan for Kimi K2 Agent
+# This demonstrates automated development workflow
+
+# Setup and initialization
+echo "🚀 Starting development workflow"
+mkdir -p src tests docs
+
+# Code quality checks
+echo "📊 Running code analysis"
+python -m flake8 src/ --max-line-length=120
+python -m mypy src/
+
+# Testing
+echo "🧪 Running tests"
+python -m pytest tests/ -v --cov=src
+
+# Build and package
+echo "📦 Building package"
+python setup.py sdist bdist_wheel
+
+# Documentation
+echo "📚 Generating documentation"
+python -m sphinx.cmd.build docs/ docs/_build/
+
+# Final status
+echo "✅ Development workflow completed"

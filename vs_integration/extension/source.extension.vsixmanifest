@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="KimiK2Coder.Extension" Version="1.0.0" Language="en-US" Publisher="DYAI2025" />
+    <DisplayName>Kimi K2 Coder</DisplayName>
+    <Description>AI-powered coding assistant using Kimi K2 Instruct model for intelligent code generation, debugging, and analysis.</Description>
+    <MoreInfo>https://github.com/DYAI2025/Kimi_CLI</MoreInfo>
+    <License>LICENSE</License>
+    <Icon>Resources\kimi_icon.ico</Icon>
+    <PreviewImage>Resources\preview.png</PreviewImage>
+    <Tags>AI, Coding, Assistant, Kimi, K2, Moonshot, Code Generation, Debugging</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Professional" Version="[17.0,18.0)" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[17.0,18.0)" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.8,)" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.17.0" DisplayName="Visual Studio MPF 17.0" d:Source="Installed" Version="[17.0,18.0)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+    <Prerequisite Id="Microsoft.Component.PythonTools" Version="[17.0,18.0)" DisplayName="Python development tools" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="KimiK2Coder" Path="|KimiK2Coder;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="Templates\ProjectTemplates" d:TargetPath="ProjectTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="Templates\ItemTemplates" d:TargetPath="ItemTemplates" />
+  </Assets>
+</PackageManifest>
