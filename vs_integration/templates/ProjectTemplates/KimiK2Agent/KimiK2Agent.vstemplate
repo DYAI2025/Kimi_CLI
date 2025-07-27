@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkstyle/2010">
+  <TemplateData>
+    <Name>Kimi K2 AI Agent Project</Name>
+    <Description>Create a new AI agent project powered by Kimi K2 Instruct for autonomous code execution and development.</Description>
+    <Icon>Resources\ai_agent_icon.ico</Icon>
+    <ProjectType>Python</ProjectType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>KimiK2Agent</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <CreateInPlace>true</CreateInPlace>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="KimiK2Agent.pyproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="main.py">main.py</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="kimi_agent.py">kimi_agent.py</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="config.py">config.py</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="requirements.txt">requirements.txt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="README.md">README.md</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName=".env.example">.env.example</ProjectItem>
+      <Folder Name="tools" TargetFolderName="tools">
+        <ProjectItem ReplaceParameters="true" TargetFileName="execution_toolkit.py">tools\execution_toolkit.py</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="code_analyzer.py">tools\code_analyzer.py</ProjectItem>
+      </Folder>
+      <Folder Name="plans" TargetFolderName="plans">
+        <ProjectItem ReplaceParameters="true" TargetFileName="example_plan.txt">plans\example_plan.txt</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>KimiK2Coder.ProjectWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>KimiK2Coder.ProjectWizard.KimiK2AgentWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

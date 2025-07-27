@@ -1,0 +1,16 @@
+{
+  "python.defaultInterpreterPath": "/usr/bin/python3",
+  "python.autoComplete.addBrackets": true,
+  "python.analysis.extraPaths": [
+    ".",
+    "./tools",
+    "./src"
+  ],
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": true,
+  "files.associations": {
+    "*.txt": "plaintext"
+  },
+  "python.terminal.activateEnvironment": true
+}
